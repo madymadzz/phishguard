@@ -14,6 +14,7 @@ import {
   Search,
   X,
   GraduationCap,
+  Trophy,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -108,6 +109,30 @@ export default function LearnPage() {
             Learn how to recognize deceptive URLs, detect quishing in public QR codes, and protect your accounts.
           </p>
         </div>
+
+        {/* Spot the Phish Quiz Banner */}
+        <Link
+          href="/learn/quiz"
+          className="flex items-center justify-between p-4 rounded-3xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 hover:border-amber-500/40 transition-colors group shadow-2xs"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-500 flex items-center justify-center shrink-0">
+              <Trophy className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
+                Interactive Challenge
+              </span>
+              <h3 className="text-xs font-bold text-[#1F2F3D] dark:text-[#F1F5F9] group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                Spot the Phish Quiz (5 Questions)
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Test your instincts on SMS, banking lures & Quishing
+              </p>
+            </div>
+          </div>
+          <ChevronRight className="w-5 h-5 text-amber-500 group-hover:translate-x-1 transition-transform shrink-0" />
+        </Link>
 
         {/* Search Input */}
         <div className="relative flex items-center">

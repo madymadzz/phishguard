@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { ScanningAnimation } from "@/components/scanner/ScanningAnimation";
@@ -20,15 +20,19 @@ import {
   AlertTriangle,
   ShieldAlert,
   ChevronRight,
+  Share2,
+  Sparkles,
 } from "lucide-react";
 
-export default function UrlScannerPage() {
+function UrlScannerContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [url, setUrl] = useState("");
   const [isScanning, setIsScanning] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [sharedNotice, setSharedNotice] = useState<string | null>(null);
   const [recentScans, setRecentScans] = useState<Scan[]>([]);
   const [loadingRecent, setLoadingRecent] = useState(true);
 
@@ -36,6 +40,28 @@ export default function UrlScannerPage() {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Handle incoming PWA Share Target parameters (?url= or ?text= or ?title=)
+  useEffect(() => {
+    const rawUrl = searchParams.get("url");
+    const rawText = searchParams.get("text");
+    const rawTitle = searchParams.get("title");
+
+    const candidate = rawUrl || rawText || rawTitle;
+    if (candidate) {
+      // Extract URL from candidate text if mixed with message body (e.g. from WhatsApp/SMS)
+      const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}[^\s]*)/i;
+      const match = candidate.match(urlRegex);
+      const extracted = match ? match[0] : candidate.trim();
+
+      if (extracted) {
+        setUrl(extracted);
+        setSharedNotice("Received link shared from external app (Messenger/WhatsApp/SMS)");
+        setErrorMessage(null);
+        inputRef.current?.focus();
+      }
+    }
+  }, [searchParams]);
 
   // Fetch recent scans
   useEffect(() => {
@@ -68,15 +94,23 @@ export default function UrlScannerPage() {
     fetchRecent();
   }, []);
 
-  // Clipboard Paste handler
+  // Clipboard Paste handler (explicit user-tap only)
   async function handlePaste() {
     try {
       if (navigator.clipboard && navigator.clipboard.readText) {
         const text = await navigator.clipboard.readText();
         if (text) {
-          setUrl(text.trim());
+          // Extract URL if clipboard contains text with a link
+          const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}[^\s]*)/i;
+          const match = text.match(urlRegex);
+          const cleanText = match ? match[0] : text.trim();
+
+          setUrl(cleanText);
           setErrorMessage(null);
+          setSharedNotice(null);
           inputRef.current?.focus();
+        } else {
+          setErrorMessage("Your clipboard is currently empty.");
         }
       } else {
         setErrorMessage("Clipboard access is not supported by your browser.");
@@ -89,6 +123,7 @@ export default function UrlScannerPage() {
   function handleClear() {
     setUrl("");
     setErrorMessage(null);
+    setSharedNotice(null);
     inputRef.current?.focus();
   }
 
@@ -164,19 +199,39 @@ export default function UrlScannerPage() {
           <>
             {/* Input Form Card */}
             <div className="bg-white dark:bg-[#16222E] rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-[#0B5FFF] flex items-center justify-center">
-                  <LinkIcon className="w-5 h-5" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-[#0B5FFF] flex items-center justify-center">
+                    <LinkIcon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h1 className="text-sm font-bold text-[#1F2F3D] dark:text-[#F1F5F9]">
+                      Inspect Any Web Link
+                    </h1>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      Paste suspicious URLs from SMS, email, or chat
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-sm font-bold text-[#1F2F3D] dark:text-[#F1F5F9]">
-                    Inspect Any Web Link
-                  </h1>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Paste suspicious URLs from SMS, email, or chat
-                  </p>
-                </div>
+
+                {/* Quick Clipboard Prompt Chip */}
+                <button
+                  type="button"
+                  onClick={handlePaste}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-[#0B5FFF] hover:bg-blue-100 dark:hover:bg-blue-900/60 text-[11px] font-semibold transition-colors"
+                  title="Check clipboard for link"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Scan Copied Link</span>
+                </button>
               </div>
+
+              {sharedNotice && (
+                <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/50 text-[#0B5FFF] text-xs flex items-center gap-2 animate-in fade-in">
+                  <Share2 className="w-4 h-4 shrink-0" />
+                  <span>{sharedNotice}</span>
+                </div>
+              )}
 
               {errorMessage && (
                 <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-300 text-xs flex items-center gap-2 animate-in fade-in">
@@ -315,5 +370,21 @@ export default function UrlScannerPage() {
         )}
       </div>
     </AppShell>
+  );
+}
+
+export default function UrlScannerPage() {
+  return (
+    <Suspense
+      fallback={
+        <AppShell showHeader={false} footerContent={<BottomNav />}>
+          <div className="flex-1 p-6 flex items-center justify-center">
+            <ScanningAnimation />
+          </div>
+        </AppShell>
+      }
+    >
+      <UrlScannerContent />
+    </Suspense>
   );
 }
