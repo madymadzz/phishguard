@@ -4,10 +4,18 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { runDetectionEngine } from "@/lib/detection";
 import { normalizeUrl } from "@/lib/detection/normalize";
 import { analyzeNonUrlPayload } from "@/lib/detection/qrPayload";
+import { verifyOrigin } from "@/lib/auth/csrf";
 import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
+    if (!verifyOrigin(req)) {
+      return NextResponse.json(
+        { error: "Forbidden: Cross-site request rejected" },
+        { status: 403 }
+      );
+    }
+
     const supabase = await createClient();
     const {
       data: { user },

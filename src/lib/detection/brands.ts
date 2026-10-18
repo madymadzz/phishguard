@@ -275,7 +275,8 @@ export function checkBrandImpersonation(
 
       if (domainCore.length >= 4 && officialCore.length >= 4) {
         const dist = distance(domainCore, officialCore);
-        if (dist > 0 && dist <= 2) {
+        const maxDist = Math.min(domainCore.length, officialCore.length) >= 6 ? 2 : 1;
+        if (dist > 0 && dist <= maxDist) {
           return {
             isImpersonating: true,
             isTyposquat: true,

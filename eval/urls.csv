@@ -1,0 +1,51 @@
+url,ground_truth,notes
+https://www.google.com,safe,Legitimate top search engine
+https://github.com,safe,Legitimate developer platform
+https://en.wikipedia.org/wiki/Phishing,safe,Legitimate encyclopedia article
+https://www.microsoft.com/en-us,safe,Legitimate software vendor
+https://tip.edu.ph,safe,Technological Institute of the Philippines legitimate portal
+https://www.bdo.com.ph,safe,Legitimate Philippine banking domain
+https://www.bpi.com.ph,safe,Legitimate bank portal
+https://www.gcash.com,safe,Legitimate e-wallet domain
+https://www.maya.ph,safe,Legitimate digital bank domain
+https://www.gov.ph,safe,Legitimate government portal
+https://deped.gov.ph,safe,Legitimate education portal
+https://apple.com,safe,Legitimate Apple website
+https://amazon.com,safe,Legitimate e-commerce platform
+https://netflix.com,safe,Legitimate streaming service
+https://facebook.com,safe,Legitimate social network
+http://malware.testing.google.test/testing/malware/,dangerous,Google Safe Browsing standard test malware sample
+http://192.168.1.1/admin,dangerous,Raw IPv4 address in hostname
+http://203.0.113.45/login,dangerous,Public raw IP address host
+http://[2001:db8::1]/secure,dangerous,Raw IPv6 address in hostname
+https://google.com@evil-phishing-site.xyz/login,dangerous,Userinfo @ trick attempting to mask destination
+https://paypa1-security-verification.com/login,dangerous,Typosquatting PayPal with numeral 1
+https://appleid-support-icloud.account-verify.info,dangerous,Excessive subdomains impersonating Apple ID
+https://bpi-online-security-update.top/login.php,dangerous,Phishing mimicking BPI on suspicious top-level domain
+https://gcash-verification-claim.buzz,dangerous,Phishing GCash brand keywords on suspicious TLD
+https://microsoft-login-online365.xyz,dangerous,Microsoft brand impersonation on .xyz
+https://netflix-billing-update.cc,dangerous,Netflix brand spoofing
+https://secure-banking-alert.tk,dangerous,Suspicious free TLD .tk
+https://login-facebook-account-verify.cf,dangerous,Facebook credential harvesting on free .cf TLD
+https://claim-free-allowance-ched.ga,dangerous,Philippine scholarship scam domain on .ga
+https://steamcommunity-trade-offer.link,dangerous,Steam inventory trading scam
+https://bit.ly/3phish-test,suspicious,Generic shortened URL requiring redirect resolution
+https://tinyurl.com/secure-check,suspicious,Shortened URL obfuscating final host
+https://t.co/xyz123,suspicious,Shortener service
+https://rb.gy/promo99,suspicious,Shortener service
+http://unencrypted-login-portal.com/account,suspicious,Unencrypted HTTP connection soliciting sensitive account credentials
+https://free-crypto-giveaway-2026.online,suspicious,Cryptocurrency scam trigger keywords
+https://account-verify-immediate-action-required.site,suspicious,Urgency and pressure keywords
+https://security-notice-update-password.biz,suspicious,Password reset phishing lures
+https://promo-discount-voucher-claim.icu,suspicious,Suspicious .icu TLD with promo lure
+https://update-kyc-documents.shop,suspicious,KYC lure domain on .shop
+https://cnn.com,safe,Legitimate news portal
+https://bbc.com,safe,Legitimate global broadcaster
+https://stackoverflow.com,safe,Legitimate developer Q&A
+https://developer.mozilla.org,safe,MDN Web Docs legitimate site
+https://react.dev,safe,Official React documentation
+https://nextjs.org,safe,Next.js official documentation
+https://supabase.com,safe,Official Supabase platform
+https://vercel.com,safe,Official Vercel deployment platform
+https://tailwindcss.com,safe,Official Tailwind CSS documentation
+https://vitejs.dev,safe,Official Vite documentation

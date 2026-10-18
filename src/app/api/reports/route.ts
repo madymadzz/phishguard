@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { verifyOrigin } from "@/lib/auth/csrf";
 import { z } from "zod";
 
 const reportSchema = z.object({
@@ -13,6 +14,13 @@ const reportSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    if (!verifyOrigin(req)) {
+      return NextResponse.json(
+        { error: "Forbidden: Cross-site request rejected" },
+        { status: 403 }
+      );
+    }
+
     const supabase = await createClient();
     const {
       data: { user },

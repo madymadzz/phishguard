@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { PwaRegister } from "@/components/pwa/PwaRegister";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -52,6 +54,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <PwaRegister />
+          <InstallPrompt />
         </ThemeProvider>
       </body>
     </html>

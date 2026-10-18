@@ -128,9 +128,9 @@ export function analyzeHeuristics(params: HeuristicAnalysisParams): HeuristicSig
     });
   }
 
-  // 4. Known URL shortener (+10)
+  // 4. Known URL shortener (+25: suspicious threshold)
   if (isShortener) {
-    score += 10;
+    score += 25;
     signals["url_shortener"] = true;
     reasons.push({
       code: "SHORTENED_URL",

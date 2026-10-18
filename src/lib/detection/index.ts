@@ -179,7 +179,7 @@ export async function runDetectionEngine(
   // 2. Evaluate structural heuristics
   const heuristicsResult = evaluateHeuristics(
     finalUrl,
-    unshortenResult.isShortener || redirectChain.length > 1,
+    unshortenResult.isShortener,
     redirectChain
   );
 
