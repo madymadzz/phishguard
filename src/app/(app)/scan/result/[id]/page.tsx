@@ -406,26 +406,33 @@ export default function ScanResultPage() {
 
         {/* Primary Action Buttons */}
         <div className="space-y-2.5 pt-2">
-          {/* Open Link Button */}
-          <button
-            onClick={handleOpenLinkAction}
-            className={`w-full py-3 px-4 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
-              isDangerous
-                ? "bg-red-600/10 hover:bg-red-600/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50"
-                : isSuspicious
-                ? "bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50"
-                : "bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20"
-            }`}
-          >
-            <ExternalLink className="w-4 h-4" />
-            <span>
-              {isDangerous
-                ? "Open Dangerous Link (Caution)"
-                : isSuspicious
-                ? "Open Suspicious Link (Caution)"
-                : "Open Verified Link"}
-            </span>
-          </button>
+          {/* Open Link Button or Non-Web Link Indicator */}
+          {scan.final_url ? (
+            <button
+              onClick={handleOpenLinkAction}
+              className={`w-full py-3 px-4 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
+                isDangerous
+                  ? "bg-red-600/10 hover:bg-red-600/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50"
+                  : isSuspicious
+                  ? "bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50"
+                  : "bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20"
+              }`}
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span>
+                {isDangerous
+                  ? "Open Dangerous Link (Caution)"
+                  : isSuspicious
+                  ? "Open Suspicious Link (Caution)"
+                  : "Open Verified Link"}
+              </span>
+            </button>
+          ) : (
+            <div className="w-full py-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 text-center flex items-center justify-center gap-2">
+              <Info className="w-4 h-4 text-[#0B5FFF]" />
+              <span>Not a Web Link — Local Device Action</span>
+            </div>
+          )}
 
           <div className="flex items-center gap-2">
             {/* Scan Again */}

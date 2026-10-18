@@ -70,11 +70,16 @@ export default function SignupPage() {
         return;
       }
 
-      // If session exists immediately (email confirmation disabled), redirect to /home
+      // With email confirmation disabled, route directly to /home
       if (authData.session) {
         router.push("/home");
       } else {
-        router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
+        // Sign in immediately to establish session and proceed to /home
+        await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        });
+        router.push("/home");
       }
     } catch {
       setAuthError("An unexpected error occurred during signup. Please try again.");

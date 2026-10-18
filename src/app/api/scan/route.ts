@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { runDetectionEngine } from "@/lib/detection";
 import { normalizeUrl } from "@/lib/detection/normalize";
+import { analyzeNonUrlPayload } from "@/lib/detection/qrPayload";
 import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
@@ -82,6 +83,69 @@ export async function POST(req: NextRequest) {
         { error: "Daily scan limit reached (300 scans/day). Please try again tomorrow." },
         { status: 429 }
       );
+    }
+
+    // If source is QR and payload is non-URL (WiFi, Tel, SMS, Mailto, Payment, plain text), handle immediately
+    if (source === "qr") {
+      const nonUrlCheck = analyzeNonUrlPayload(rawInput);
+      if (nonUrlCheck.isNonUrl) {
+        const { data: scanRow, error: insertError } = await supabase
+          .from("scans")
+          .insert({
+            user_id: user.id,
+            source: "qr",
+            input_value: rawInput,
+            final_url: null,
+            hostname: null,
+            registrable_domain: null,
+            risk_level: nonUrlCheck.riskLevel,
+            risk_score: nonUrlCheck.riskScore,
+            reasons: nonUrlCheck.reasons,
+            signals: { is_non_url: true, payload_type: nonUrlCheck.payloadType },
+            redirect_chain: [],
+            ai_explanation: {
+              summary: nonUrlCheck.summary,
+              bullets: nonUrlCheck.bullets,
+              aiVerdict: nonUrlCheck.riskLevel,
+              confidence: 1.0,
+            },
+            engine_version: "1.0.0",
+          })
+          .select("id")
+          .single();
+
+        if (insertError) {
+          console.error("Failed to record non-URL QR scan:", insertError);
+          return NextResponse.json(
+            { error: "Failed to record scan result." },
+            { status: 500 }
+          );
+        }
+
+        return NextResponse.json({
+          success: true,
+          scanId: scanRow.id,
+          isNonUrl: true,
+          payloadType: nonUrlCheck.payloadType,
+          actionDescription: nonUrlCheck.actionDescription,
+          inputValue: rawInput,
+          finalUrl: null,
+          hostname: null,
+          registrableDomain: null,
+          riskLevel: nonUrlCheck.riskLevel,
+          riskScore: nonUrlCheck.riskScore,
+          reasons: nonUrlCheck.reasons,
+          signals: { is_non_url: true, payload_type: nonUrlCheck.payloadType },
+          redirectChain: [],
+          aiExplanation: {
+            summary: nonUrlCheck.summary,
+            bullets: nonUrlCheck.bullets,
+            aiVerdict: nonUrlCheck.riskLevel,
+            confidence: 1.0,
+          },
+          engineVersion: "1.0.0",
+        });
+      }
     }
 
     // Normalize input to compute consistent cache key & check domain rules
