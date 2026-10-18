@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import { PwaRegister } from "@/components/pwa/PwaRegister";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import "./globals.css";
@@ -53,9 +54,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <PwaRegister />
-          <InstallPrompt />
+          <LanguageProvider>
+            {children}
+            <PwaRegister />
+            <InstallPrompt />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

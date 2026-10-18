@@ -6,6 +6,7 @@ import { getUserProfile, getRecentScans, getUserScanStats, getFeaturedTip } from
 import { AppShell } from "@/components/layout/AppShell";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Logo } from "@/components/ui/logo";
+import { LanguageToggle } from "@/lib/i18n/LanguageContext";
 import { formatDate } from "@/lib/utils";
 import {
   Link as LinkIcon,
@@ -51,13 +52,16 @@ export default async function HomePage() {
       headerContent={
         <div className="w-full flex items-center justify-between">
           <Logo size="sm" showTagline={false} />
-          <Link
-            href="/profile"
-            className="w-9 h-9 rounded-full bg-[#EBF2FF] dark:bg-[#1E293B] border border-blue-200 dark:border-blue-900/60 flex items-center justify-center text-[#0B5FFF] font-bold text-xs hover:ring-2 hover:ring-[#0B5FFF] transition-all"
-            aria-label="Open profile"
-          >
-            {initials || "U"}
-          </Link>
+          <div className="flex items-center gap-2">
+            <LanguageToggle />
+            <Link
+              href="/profile"
+              className="w-9 h-9 rounded-full bg-[#EBF2FF] dark:bg-[#1E293B] border border-blue-200 dark:border-blue-900/60 flex items-center justify-center text-[#0B5FFF] font-bold text-xs hover:ring-2 hover:ring-[#0B5FFF] transition-all"
+              aria-label="Open profile"
+            >
+              {initials || "U"}
+            </Link>
+          </div>
         </div>
       }
       footerContent={<BottomNav />}

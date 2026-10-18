@@ -18,7 +18,9 @@ import {
   Loader2,
   AlertCircle,
   ExternalLink,
+  Globe,
 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface ProfileClientProps {
   initialProfile: Profile | null;
@@ -28,6 +30,7 @@ interface ProfileClientProps {
 export function ProfileClient({ initialProfile, userEmail }: ProfileClientProps) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const { locale, setLocale, t } = useLanguage();
 
   const [displayName, setDisplayName] = useState(
     initialProfile?.display_name || userEmail.split("@")[0] || ""
@@ -211,6 +214,40 @@ export function ProfileClient({ initialProfile, userEmail }: ProfileClientProps)
           >
             <Monitor className="w-5 h-5" />
             <span>Auto</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Language Preference */}
+      <div className="p-5 rounded-3xl bg-white dark:bg-[#16222E] border border-slate-200/80 dark:border-slate-800 space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+          <Globe className="w-3.5 h-3.5" />
+          <span>{t("profile", "language")}</span>
+        </h3>
+
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setLocale("en")}
+            className={`p-3 rounded-2xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              locale === "en"
+                ? "border-[#0B5FFF] bg-[#EBF2FF] text-[#0B5FFF] dark:bg-blue-950/40 font-bold"
+                : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+            }`}
+          >
+            <span>English (EN)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setLocale("fil")}
+            className={`p-3 rounded-2xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              locale === "fil"
+                ? "border-[#0B5FFF] bg-[#EBF2FF] text-[#0B5FFF] dark:bg-blue-950/40 font-bold"
+                : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+            }`}
+          >
+            <span>Filipino (FIL)</span>
           </button>
         </div>
       </div>

@@ -5,25 +5,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, History, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface NavItem {
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "/home", icon: Home },
-  { label: "History", href: "/history", icon: History },
-  { label: "Learn", href: "/learn", icon: BookOpen },
-];
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export function BottomNav() {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { label: t("nav", "home"), href: "/home", icon: Home },
+    { label: t("nav", "history"), href: "/history", icon: History },
+    { label: t("nav", "learn"), href: "/learn", icon: BookOpen },
+  ];
 
   return (
     <div className="w-full flex items-center justify-around py-2 px-3">
-      {NAV_ITEMS.map((item) => {
+      {navItems.map((item) => {
         const Icon = item.icon;
         const isActive =
           item.href === "/home"
