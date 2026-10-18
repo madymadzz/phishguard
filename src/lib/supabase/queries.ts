@@ -73,23 +73,49 @@ export async function getUserScanStats(userId: string): Promise<UserStats> {
   };
 }
 
-export async function getFeaturedTip(): Promise<{ title: string; summary: string; slug: string } | null> {
+export async function getPublishedArticles(): Promise<LearnArticle[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("learn_articles")
-    .select("slug, title, summary")
+    .select("*")
     .eq("published", true)
-    .order("sort_order", { ascending: true })
-    .limit(1)
+    .order("sort_order", { ascending: true });
+
+  if (error || !data) return [];
+  return data as LearnArticle[];
+}
+
+export async function getArticleBySlug(slug: string): Promise<LearnArticle | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("learn_articles")
+    .select("*")
+    .eq("slug", slug)
+    .eq("published", true)
     .maybeSingle();
 
-  if (error || !data) {
-    return {
-      slug: "spot-a-fake-link",
-      title: "How to Spot a Fake Link",
-      summary: "Inspect the domain right before .com: attackers use typos like paypa1.com to trick you.",
-    };
+  if (error || !data) return null;
+  return data as LearnArticle;
+}
+
+export async function getFeaturedTip(): Promise<{ title: string; summary: string; slug: string } | null> {
+  const supabase = await createClient();
+  const { data: allTips, error } = await supabase
+    .from("learn_articles")
+    .select("slug, title, summary")
+    .eq("published", true)
+    .order("sort_order", { ascending: true });
+
+  if (!error && allTips && allTips.length > 0) {
+    // Rotate tip daily based on current date
+    const now = new Date();
+    const dayIndex = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+    return allTips[dayIndex % allTips.length];
   }
 
-  return data as Pick<LearnArticle, "slug" | "title" | "summary">;
+  return {
+    slug: "spot-a-fake-link",
+    title: "How to Spot a Fake Link",
+    summary: "Inspect the domain right before .com: attackers use typos like paypa1.com to trick you.",
+  };
 }
