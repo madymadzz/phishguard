@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F6F8FB;
+  --foreground: #1F2F3D;
+  --card: #FFFFFF;
+  --card-foreground: #1F2F3D;
+  --popover: #FFFFFF;
+  --popover-foreground: #1F2F3D;
+  --primary: #0B5FFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EBF2FF;
+  --secondary-foreground: #0B5FFF;
+  --muted: #E2E8F0;
+  --muted-foreground: #64748B;
+  --accent: #EBF2FF;
+  --accent-foreground: #0B5FFF;
+  --destructive: #E5484D;
+  --destructive-foreground: #FFFFFF;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #0B5FFF;
+  --radius: 1rem;
+
+  /* Custom Status & Brand Tokens */
+  --brand-blue: #0B5FFF;
+  --brand-navy: #1F2F3D;
+  --safe: #22A559;
+  --safe-soft: #E6F6EC;
+  --safe-foreground: #13733A;
+  --suspicious: #F59E0B;
+  --suspicious-soft: #FEF3DC;
+  --suspicious-foreground: #B45309;
+  --danger: #E5484D;
+  --danger-soft: #FDECEC;
+  --danger-foreground: #B91C1C;
+}
+
+.dark {
+  --background: #0E1620;
+  --foreground: #F1F5F9;
+  --card: #16222E;
+  --card-foreground: #F1F5F9;
+  --popover: #16222E;
+  --popover-foreground: #F1F5F9;
+  --primary: #0B5FFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1F2F3D;
+  --secondary-foreground: #93C5FD;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #1F2F3D;
+  --accent-foreground: #93C5FD;
+  --destructive: #E5484D;
+  --destructive-foreground: #FFFFFF;
+  --border: #243447;
+  --input: #243447;
+  --ring: #3B82F6;
+
+  /* Dark Status Tokens */
+  --brand-blue: #3B82F6;
+  --brand-navy: #1F2F3D;
+  --safe: #22A559;
+  --safe-soft: #0E2E1C;
+  --safe-foreground: #4ADE80;
+  --suspicious: #F59E0B;
+  --suspicious-soft: #3D2905;
+  --suspicious-foreground: #FCD34D;
+  --danger: #E5484D;
+  --danger-soft: #3A1012;
+  --danger-foreground: #FCA5A5;
+}
+
+body {
+  background-color: #EEF2F6;
+  color: var(--foreground);
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark body {
+  background-color: #080C12;
+}
+
+/* Safe area support for notch and home bars */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Mobile viewport wrapper centered on desktop */
+.app-container {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
